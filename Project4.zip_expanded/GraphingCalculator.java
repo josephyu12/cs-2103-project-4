@@ -23,6 +23,8 @@ public class GraphingCalculator extends Application {
 	public static void main (String[] args) {
 		launch(args);
 	}
+	
+	// test change
 
 	protected static final int WINDOW_WIDTH = 600, WINDOW_HEIGHT = 500;
 	protected static final double MIN_X = -10, MAX_X = +10, DELTA_X = 0.01;
