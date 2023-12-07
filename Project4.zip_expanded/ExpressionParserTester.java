@@ -24,6 +24,7 @@ public class ExpressionParserTester {
 	public void testExpression1 () throws ExpressionParseException {
 		final String expressionStr = "x+x";
 		final String parseTreeStr = "+\n\tx\n\tx\n";
+		_parser.parse(expressionStr);
 		assertEquals(parseTreeStr, _parser.parse(expressionStr).convertToString(0));
 	}
 
@@ -34,6 +35,7 @@ public class ExpressionParserTester {
 	public void testExpression2 () throws ExpressionParseException {
 		final String expressionStr = "13*x";
 		final String parseTreeStr = "*\n\t13.0\n\tx\n";
+		System.out.println(_parser.parse(expressionStr).convertToString(0));
 		assertEquals(parseTreeStr, _parser.parse(expressionStr).convertToString(0));
 	}
 

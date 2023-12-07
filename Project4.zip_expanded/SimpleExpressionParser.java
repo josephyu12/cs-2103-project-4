@@ -19,6 +19,12 @@ public class SimpleExpressionParser implements ExpressionParser {
 		str = str.replaceAll(" ", "");
 		Expression expression = parseAdditiveExpression(str);
 		if (expression == null) {
+			expression = parseVariableExpression(str);
+		}
+		if (expression == null) {
+			expression = parseLiteralExpression(str);
+		}
+		if (expression == null) {
 			throw new ExpressionParseException("Cannot parse expression: " + str);
 		}
 
@@ -27,7 +33,19 @@ public class SimpleExpressionParser implements ExpressionParser {
 	
 	protected Expression parseAdditiveExpression (String str) {
 		Expression expression;
-
+		for(int i = 0; i < str.length(); i++) {
+			if(str.charAt(i) == '+') {
+				try {
+					Expression left = parse(str.substring(0, i));
+					Expression right = parse(str.substring(i + 1, str.length()));
+					expression = new AdditiveExpression(left, right);
+					return expression;
+				} catch (ExpressionParseException e) {
+					continue;
+				}
+				
+			}
+		}
 		// TODO: implement me
 		
 		return null;
@@ -37,7 +55,7 @@ public class SimpleExpressionParser implements ExpressionParser {
         protected /*Variable*/Expression parseVariableExpression (String str) {
                 if (str.equals("x")) {
                         // TODO implement the VariableExpression class and uncomment line below
-                        // return new VariableExpression();
+                        return new VariableExpression();
                 }
                 return null;
         }
@@ -85,9 +103,9 @@ public class SimpleExpressionParser implements ExpressionParser {
 		    "[\\x00-\\x20]*");// Optional trailing "whitespace"
 
 		if (str.matches(fpRegex)) {
-			return null;
+			// return null;
 			// TODO: Once you implement LiteralExpression, replace the line above with the line below:
-			// return new LiteralExpression(str);
+			return new LiteralExpression(str);
 		}
 		return null;
 	}

@@ -5,3 +5,8 @@
 /GraphingCalculator.class
 /SimpleExpressionParser.class
 /GraphingCalculator$1.class
+/StartExpression.class
+/BinaryExpression.class
+/AdditiveExpression.class
+/LiteralExpression.class
+/VariableExpression.class
