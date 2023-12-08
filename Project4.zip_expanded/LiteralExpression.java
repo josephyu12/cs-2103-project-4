@@ -19,7 +19,7 @@ public class LiteralExpression implements Expression {
 	@Override
 	public String convertToString(int indentLevel) {
 		String tabs = "\t".repeat(indentLevel);
-		return tabs + _value;
+		return tabs + _value + "\n";
 	}
 
 	@Override
@@ -31,5 +31,4 @@ public class LiteralExpression implements Expression {
 	public Expression differentiate() {
 		return new LiteralExpression(0);
 	}
-
 }

@@ -9,7 +9,7 @@ public class VariableExpression implements Expression {
 	@Override
 	public String convertToString(int indentLevel) {
 		String tabs = "\t".repeat(indentLevel);
-		return tabs + "x";
+		return tabs + "x" + "\n";
 	}
 
 	@Override

@@ -10,3 +10,6 @@
 /AdditiveExpression.class
 /LiteralExpression.class
 /VariableExpression.class
+/UnaryExpression.class
+/TerminalExpression.class
+/ParentheticalExpression.class
