@@ -13,3 +13,6 @@
 /UnaryExpression.class
 /TerminalExpression.class
 /ParentheticalExpression.class
+/SubtractionExpression.class
+/AdditionExpression.class
+/SimpleExpressionParser$ParseSequence.class

@@ -58,6 +58,20 @@ public class ExpressionParserTester {
 	}
 
 	@Test
+	public void testExpression5() throws ExpressionParseException {
+		final String expressionStr = "((x))";
+		final String parseTreeStr = "()\n" + "\t()\n" + "\t\tx\n";
+		_parser.parse(expressionStr);
+		assertEquals(parseTreeStr, _parser.parse(expressionStr).convertToString(0));
+	}
+	
+	@Test
+	public void testExpression10000() throws ExpressionParseException {
+		final String expressionStr = "";
+		final String parseTreeStr = "";
+		assertEquals(parseTreeStr, _parser.parse(expressionStr).convertToString(0));
+	}
+	@Test
 	/**
 	 * Verifies that a specific expression is parsed into the correct parse tree.
 	 */
