@@ -7,7 +7,7 @@ public class ParentheticalExpression extends UnaryExpression {
 	}
 	@Override
 	public Expression deepCopy() {
-		return new ParentheticalExpression(_next);
+		return new ParentheticalExpression(_next.deepCopy());
 	}
 
 	@Override

@@ -1,6 +1,52 @@
+import java.util.ArrayList;
 import java.util.function.*;
 
 public class SimpleExpressionParser implements ExpressionParser {
+	private ParseSequence _sequence;
+	private ParseSequence _parserS;
+	private ParseSequence _parserM;
+	private ParseSequence _parserE;
+	private ParseSequence _parserP;
+	private ParseSequence _parserL;
+	private ParseSequence _parserV;
+
+	private class ParseSequence {
+		private ArrayList<Function<String, Expression>> _parseFcns;
+		private ArrayList<ParseSequence> _parseSequences;
+
+		public ParseSequence() {
+			_parseFcns = new ArrayList<Function<String, Expression>>();
+		}
+
+		public void addFcn(Function<String, Expression> aParseFcn) {
+			_parseFcns.add(aParseFcn);
+		}
+
+		public void addSequence(ParseSequence aParseSequence) {
+			_parseSequences.add(aParseSequence);
+		}
+
+		public Expression parse(String str) {
+			for (Function<String, Expression> aParseFcn : _parseFcns) {
+				Expression expression = aParseFcn.apply(str);
+				if (expression != null) {
+					return expression;
+				}
+			}
+			for (ParseSequence aParseSequence : _parseSequences) {
+				Expression expression = aParseSequence.parse(str);
+				if (expression != null) {
+					return expression;
+				}
+			}
+			return null;
+		}
+
+		public Function<String, Expression> getParseFcn() {
+			return str -> parse(str);
+		}
+	}
+
 	/*-
 	 * Attempts to create an expression tree from the specified String.
 	 * Throws a ExpressionParseException if the specified string cannot be parsed.
@@ -33,37 +79,58 @@ public class SimpleExpressionParser implements ExpressionParser {
 
 		return expression;
 	}
-	
-	protected Expression parseBinaryExpression(String str, String operator) {
-		// TODO: see if this method is useful
+
+	protected Expression parseAdditiveExpression(String str) {
 		return null;
 	}
 
-	protected Expression parseAdditiveExpression(String str) {
-		Expression expression;
+	protected /* Exponential */ Expression parseExponentialExpression(String str) {
+		Expression expression = null;
+		Expression left = null;
+		Expression right = null;
 		for (int i = 0; i < str.length(); i++) {
-			if (str.charAt(i) == '+') {
-				try {
-					Expression left = parse(str.substring(0, i));
-					Expression right = parse(str.substring(i + 1, str.length()));
-					expression = new AdditiveExpression(left, right);
-					return expression;
-				} catch (ExpressionParseException e) {
-					continue;
+			if (str.charAt(i) == '^') {
+				left = parseParentheticalExpression(str.substring(0, i));
+				right = parseExponentialExpression(str.substring(i + 1, str.length()));
+				if (!(left == null || right == null)) {
+					expression = new ExponentialExpression(left, right);
 				}
-
 			}
 		}
-		// TODO: implement me
+		if (expression == null) {
+			expression = parseParentheticalExpression(str);
+		}
+		if (expression == null) {
+			if (str.startsWith("log(") && str.endsWith(")")) {
+				expression = new LogarithmicExpression(
+						parseParentheticalExpression(str.substring(4, str.length() - 1)));
+			}
+		}
+		return expression;
+	}
 
-		return null;
+	protected /* Parenthetical */ Expression parseParentheticalExpression(String str) {
+		Expression expression = null;
+		if (str.length() >= 2 && str.charAt(0) == '(' && str.charAt(str.length() - 1) == ')') {
+			try {
+				// TODO: after implementing parseSum, change parse() to parseSum()
+				expression = new ParentheticalExpression(parse(str.substring(1, str.length() - 1)));
+			} catch (ExpressionParseException e) {
+			}
+		}
+		if (expression == null) {
+			expression = parseVariableExpression(str);
+		}
+		if (expression == null) {
+			expression = parseLiteralExpression(str);
+		}
+		return expression;
 	}
 
 	// TODO: once you implement a VariableExpression class, fix the return-type
 	// below.
 	protected /* Variable */Expression parseVariableExpression(String str) {
 		if (str.equals("x")) {
-			// TODO implement the VariableExpression class and uncomment line below
 			return new VariableExpression();
 		}
 		return null;
@@ -118,22 +185,9 @@ public class SimpleExpressionParser implements ExpressionParser {
 		}
 		return null;
 	}
-	
-	protected /*Parenthetical*/ Expression parseParentheticalExpression(String str) {
-		if(str.length() >= 2 && str.charAt(0) == '(' && str.charAt(str.length() - 1) == ')') {
-			try {
-				Expression next = parse(str.substring(1, str.length() - 1));
-				Expression expression = new ParentheticalExpression(next);
-				return expression;
-			} catch (ExpressionParseException e) {
-			}
-
-		}
-		return null;
-	}
 
 	public static void main(String[] args) throws ExpressionParseException {
 		final ExpressionParser parser = new SimpleExpressionParser();
-		System.out.println(parser.parse("10*2+12-4.").convertToString(0));
+		System.out.println(parser.parse("((x))").convertToString(0));
 	}
 }
