@@ -3,7 +3,7 @@ public class ExponentialExpression extends BinaryExpression {
 
 	public ExponentialExpression(Expression left, Expression right) {
 		_symbol = "^";
-		_evalFcn = (leftVal, rightVal) -> leftVal / rightVal;
+		_evalFcn = (leftVal, rightVal) -> Math.pow(leftVal, rightVal);
 		_left = left;
 		_right = right;
 	}

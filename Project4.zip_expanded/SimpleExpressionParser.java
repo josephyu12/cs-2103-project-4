@@ -73,6 +73,14 @@ public class SimpleExpressionParser implements ExpressionParser {
 		if (expression == null) {
 			expression = parseParentheticalExpression(str);
 		}
+
+		if (expression == null) {
+			expression = parseExponentialExpression(str);
+		}
+
+		if (expression == null) {
+			expression = parseMultiplicationExpression(str);
+		}
 		if (expression == null) {
 			throw new ExpressionParseException("Cannot parse expression: " + str);
 		}
@@ -81,13 +89,73 @@ public class SimpleExpressionParser implements ExpressionParser {
 	}
 
 	protected Expression parseAdditiveExpression(String str) {
-		return null;
+		Expression expression = null;
+		Expression left;
+		Expression right;
+		for (int i = 0; i < str.length(); i++) {
+			if (str.charAt(i) == '+') {
+				left = parseAdditiveExpression(str.substring(0, i));
+				right = parseMultiplicationExpression(str.substring(i + 1, str.length()));
+				if (!(left == null || right == null)) {
+					expression = new AdditionExpression(left, right);
+				}
+			}
+		}
+		if (expression == null) {
+			for (int i = 0; i < str.length(); i++) {
+				if (str.charAt(i) == '-') {
+					left = parseAdditiveExpression(str.substring(0, i));
+					right = parseMultiplicationExpression(str.substring(i + 1, str.length()));
+					if (!(left == null || right == null)) {
+						expression = new SubtractionExpression(left, right);
+					}
+				}
+			}
+		}
+		if (expression == null) {
+			expression = parseMultiplicationExpression(str);
+		}
+
+		return expression;
+
+	}
+
+	protected /* Multiplication */ Expression parseMultiplicationExpression(String str) {
+		Expression expression = null;
+		Expression left;
+		Expression right;
+		for (int i = 0; i < str.length(); i++) {
+			if (str.charAt(i) == '*') {
+				left = parseMultiplicationExpression(str.substring(0, i));
+				right = parseExponentialExpression(str.substring(i + 1, str.length()));
+				if (!(left == null || right == null)) {
+					expression = new MultiplicationExpression(left, right);
+				}
+			}
+		}
+		if (expression == null) {
+			for (int i = 0; i < str.length(); i++) {
+				if (str.charAt(i) == '/') {
+					left = parseMultiplicationExpression(str.substring(0, i));
+					right = parseExponentialExpression(str.substring(i + 1, str.length()));
+					if (!(left == null || right == null)) {
+						expression = new DivisionExpression(left, right);
+					}
+				}
+			}
+		}
+		if (expression == null) {
+			expression = parseExponentialExpression(str);
+		}
+
+		return expression;
+
 	}
 
 	protected /* Exponential */ Expression parseExponentialExpression(String str) {
 		Expression expression = null;
-		Expression left = null;
-		Expression right = null;
+		Expression left;
+		Expression right;
 		for (int i = 0; i < str.length(); i++) {
 			if (str.charAt(i) == '^') {
 				left = parseParentheticalExpression(str.substring(0, i));
@@ -101,9 +169,8 @@ public class SimpleExpressionParser implements ExpressionParser {
 			expression = parseParentheticalExpression(str);
 		}
 		if (expression == null) {
-			if (str.startsWith("log(") && str.endsWith(")")) {
-				expression = new LogarithmicExpression(
-						parseParentheticalExpression(str.substring(4, str.length() - 1)));
+			if (str.startsWith("log")) {
+				expression = new LogarithmicExpression(parseParentheticalExpression(str.substring(3, str.length())));
 			}
 		}
 		return expression;
@@ -188,6 +255,9 @@ public class SimpleExpressionParser implements ExpressionParser {
 
 	public static void main(String[] args) throws ExpressionParseException {
 		final ExpressionParser parser = new SimpleExpressionParser();
-		System.out.println(parser.parse("((x))").convertToString(0));
+		Expression e = parser.parse("13*x");
+		System.out.println(e.convertToString(0));
+		e.evaluate(0);
+		System.out.println(e.evaluate(0));
 	}
 }

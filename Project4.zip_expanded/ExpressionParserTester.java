@@ -45,6 +45,8 @@ public class ExpressionParserTester {
 		final String expressionStr = "4+(x+5+x)";
 		final String parseTreeStr = "+\n" + "\t4.0\n" + "\t()\n" + "\t\t+\n" + "\t\t\tx\n" + "\t\t\t+\n" + "\t\t\t\t5.0\n"
 				+ "\t\t\t\tx\n";
+		System.out.println(parseTreeStr);
+		System.out.println(_parser.parse(expressionStr).convertToString(0));
 		assertEquals(parseTreeStr, _parser.parse(expressionStr).convertToString(0));
 	}
 
@@ -65,12 +67,14 @@ public class ExpressionParserTester {
 		assertEquals(parseTreeStr, _parser.parse(expressionStr).convertToString(0));
 	}
 	
+	
 	@Test
-	public void testExpression10000() throws ExpressionParseException {
-		final String expressionStr = "";
-		final String parseTreeStr = "";
+	public void testExpression6() throws ExpressionParseException {
+		final String expressionStr = "2^x^3";
+		final String parseTreeStr = "^\n" + "\t2.0\n" + "\t^\n" + "\t\tx\n" + "\t\t3.0\n";
 		assertEquals(parseTreeStr, _parser.parse(expressionStr).convertToString(0));
 	}
+	
 	@Test
 	/**
 	 * Verifies that a specific expression is parsed into the correct parse tree.
