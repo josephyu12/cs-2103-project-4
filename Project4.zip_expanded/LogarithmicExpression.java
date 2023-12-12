@@ -2,18 +2,20 @@
 public class LogarithmicExpression extends UnaryExpression {
 
 	public LogarithmicExpression(Expression _next) {
-		
+		_symbol = "log";
+		_evalFcn = nextVal -> Math.log(nextVal);
 	}
 
 	@Override
 	public Expression deepCopy() {
-		return new LogarithmicExpression(_next);
+		return new LogarithmicExpression(_next.deepCopy());
 	}
 
 	@Override
 	public Expression differentiate() {
-		// TODO Auto-generated method stub
-		return null;
+		//Using the chain rule
+		Expression dOutside = new DivisionExpression(new LiteralExpression(1), deepCopy());
+		Expression dInside = _next.differentiate();
+		return new MultiplicationExpression(dOutside, dInside);
 	}
-	
 }
