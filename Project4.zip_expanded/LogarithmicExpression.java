@@ -1,9 +1,10 @@
 
 public class LogarithmicExpression extends UnaryExpression {
 
-	public LogarithmicExpression(Expression _next) {
+	public LogarithmicExpression(Expression next) {
 		_symbol = "log";
 		_evalFcn = nextVal -> Math.log(nextVal);
+		_next = next;
 	}
 
 	@Override
