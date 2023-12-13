@@ -46,7 +46,7 @@ public class ExpressionParserTester {
 		final String parseTreeStr = "+\n" + "\t4.0\n" + "\t()\n" + "\t\t+\n" + "\t\t\tx\n" + "\t\t\t+\n" + "\t\t\t\t5.0\n"
 				+ "\t\t\t\tx\n";
 //		System.out.println(parseTreeStr);
-//		System.out.println(_parser.parse(expressionStr).convertToString(0));
+		System.out.println(_parser.parse(expressionStr).convertToString(0));
 		assertEquals(parseTreeStr, _parser.parse(expressionStr).convertToString(0));
 	}
 
@@ -194,12 +194,21 @@ public class ExpressionParserTester {
 	
 	@Test
 	/**
-	 * Tests differentiation
+	 * Tests differentiation for linear expression
 	 */
-	public void testDifferentiate1() throws ExpressionParseException {
+	public void testDifferentiateLinear() throws ExpressionParseException {
 		final String expressionStr = "2*x";
 		final String expressionTree = "+" + "\n\t*" + "\n\t\t2.0" + "\n\t\t1.0" + "\n\t*" + "\n\t\t0.0" + "\n\t\tx\n";
-		System.out.println(_parser.parse(expressionStr).differentiate().convertToString(0));
+		assertEquals(expressionTree, _parser.parse(expressionStr).differentiate().convertToString(0));
+	}
+	
+	@Test
+	/**
+	 * Tests differentiation for exponential function
+	 */
+	public void testDifferentiateExponential() throws ExpressionParseException {
+		final String expressionStr = "2^x";
+		final String expressionTree = "*" + "\n\t()" + "\n\t\tlog" + "\n\t\t\t2.0" + "\n\t^" + "\n\t\t2.0" + "\n\t\tx\n";
 		assertEquals(expressionTree, _parser.parse(expressionStr).differentiate().convertToString(0));
 	}
 	

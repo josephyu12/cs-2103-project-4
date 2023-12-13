@@ -64,23 +64,11 @@ public class SimpleExpressionParser implements ExpressionParser {
 	public Expression parse(String str) throws ExpressionParseException {
 		str = str.replaceAll(" ", "");
 		Expression expression = parseAdditiveExpression(str);
-		if (expression == null) {
-			expression = parseVariableExpression(str);
-		}
-		if (expression == null) {
-			expression = parseLiteralExpression(str);
-		}
+
 		if (expression == null) {
 			expression = parseParentheticalExpression(str);
 		}
 
-		if (expression == null) {
-			expression = parseExponentialExpression(str);
-		}
-
-		if (expression == null) {
-			expression = parseMultiplicationExpression(str);
-		}
 		if (expression == null) {
 			throw new ExpressionParseException("Cannot parse expression: " + str);
 		}
