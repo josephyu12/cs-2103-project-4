@@ -1,8 +1,6 @@
 import java.util.ArrayList;
 import java.util.function.*;
 
-
-
 public class SimpleExpressionParser implements ExpressionParser {
 	private ParseSequence _sequence;
 	private ParseSequence _parserS;

@@ -7,15 +7,15 @@ import java.io.*;
  * Some code to help you test Project 4.
  */
 public class ExpressionParserTester {
-	private ExpressionParser _parser;
+	private ExpressionParser _parser = new SimpleExpressionParser();
 
 	@BeforeEach
 	/**
 	 * Instantiates the actors and movies graphs
 	 */
-	public void setUp() throws IOException {
-		_parser = new SimpleExpressionParser();
-	}
+//	public void setUp() throws IOException {
+//		_parser = new SimpleExpressionParser();
+//	}
 
 	@Test
 	/**
