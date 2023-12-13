@@ -22,7 +22,7 @@ public class ExponentialExpression extends BinaryExpression {
 			return new MultiplicationExpression(_left.differentiate(), powerRuleResult);
 		} else if (_left instanceof LiteralExpression) {
 			// Derivative of a^x 
-			Expression logExpression = new LogarithmicExpression(_left.deepCopy());
+			Expression logExpression = new ParentheticalExpression(new LogarithmicExpression(_left.deepCopy()));
 			Expression expExpression = new ExponentialExpression(_left.deepCopy(), _right.deepCopy());
 			return new MultiplicationExpression(logExpression, expExpression);
 		} else {

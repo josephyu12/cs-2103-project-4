@@ -12,7 +12,7 @@ public class AdditionExpression extends BinaryExpression {
 	}
 
 	public Expression differentiate() {
-		return new AdditionExpression(_left.deepCopy(), _right.deepCopy());
+		return new AdditionExpression(_left.differentiate(), _right.differentiate());
 	}
 
 }

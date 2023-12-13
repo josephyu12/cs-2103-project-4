@@ -7,15 +7,15 @@ import java.io.*;
  * Some code to help you test Project 4.
  */
 public class ExpressionParserTester {
-	private ExpressionParser _parser;
+	private ExpressionParser _parser = new SimpleExpressionParser();
 
 	@BeforeEach
 	/**
 	 * Instantiates the actors and movies graphs
 	 */
-	public void setUp() throws IOException {
-		_parser = new SimpleExpressionParser();
-	}
+//	public void setUp() throws IOException {
+//		_parser = new SimpleExpressionParser();
+//	}
 
 	@Test
 	/**
@@ -45,7 +45,7 @@ public class ExpressionParserTester {
 		final String expressionStr = "4+(x+5+x)";
 		final String parseTreeStr = "+\n" + "\t4.0\n" + "\t()\n" + "\t\t+\n" + "\t\t\tx\n" + "\t\t\t+\n" + "\t\t\t\t5.0\n"
 				+ "\t\t\t\tx\n";
-		System.out.println(parseTreeStr);
+//		System.out.println(parseTreeStr);
 		System.out.println(_parser.parse(expressionStr).convertToString(0));
 		assertEquals(parseTreeStr, _parser.parse(expressionStr).convertToString(0));
 	}
@@ -191,4 +191,26 @@ public class ExpressionParserTester {
 		final String expressionStr = "4^3^2";
 		assertEquals(262144, (int) _parser.parse(expressionStr).evaluate(0));
 	}
+	
+	@Test
+	/**
+	 * Tests differentiation for linear expression
+	 */
+	public void testDifferentiateLinear() throws ExpressionParseException {
+		final String expressionStr = "2*x";
+		final String expressionTree = "+" + "\n\t*" + "\n\t\t2.0" + "\n\t\t1.0" + "\n\t*" + "\n\t\t0.0" + "\n\t\tx\n";
+		assertEquals(expressionTree, _parser.parse(expressionStr).differentiate().convertToString(0));
+	}
+	
+	@Test
+	/**
+	 * Tests differentiation for exponential function
+	 */
+	public void testDifferentiateExponential() throws ExpressionParseException {
+		final String expressionStr = "2^x";
+		final String expressionTree = "*" + "\n\t()" + "\n\t\tlog" + "\n\t\t\t2.0" + "\n\t^" + "\n\t\t2.0" + "\n\t\tx\n";
+		assertEquals(expressionTree, _parser.parse(expressionStr).differentiate().convertToString(0));
+	}
+	
+	
 }
