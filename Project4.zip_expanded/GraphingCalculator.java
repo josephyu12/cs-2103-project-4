@@ -24,7 +24,6 @@ public class GraphingCalculator extends Application {
 		launch(args);
 	}
 	
-	// test change
 	protected static final int WINDOW_WIDTH = 600, WINDOW_HEIGHT = 500;
 	protected static final double MIN_X = -10, MAX_X = +10, DELTA_X = 0.01;
 	protected static final double MIN_Y = -10, MAX_Y = +10;

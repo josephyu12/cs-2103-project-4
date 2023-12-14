@@ -14,7 +14,7 @@ public class LogarithmicExpression extends UnaryExpression {
 
 	@Override
 	public Expression differentiate() {
-		//Using the chain rule
+		// Using the chain rule
 		Expression dOutside = new DivisionExpression(new LiteralExpression(1), _next.deepCopy());
 		Expression dInside = _next.differentiate();
 		return new MultiplicationExpression(dOutside, dInside);

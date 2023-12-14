@@ -2,6 +2,7 @@
 import java.util.function.BiFunction;
 
 public abstract class BinaryExpression implements Expression {
+	// superclass for binary expressions including addition/subtraction, multiplication/division, and exponentiation 
 	protected String _symbol;
 	protected BiFunction<Double, Double, Double> _evalFcn;
 	protected Expression _left;

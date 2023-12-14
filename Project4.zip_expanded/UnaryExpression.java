@@ -2,6 +2,7 @@
 import java.util.function.Function;
 
 public abstract class UnaryExpression implements Expression {
+	// superclass for unary operators like logarithm and parentheses
 	protected String _symbol;
 	protected Function<Double, Double> _evalFcn;
 	protected Expression _next;

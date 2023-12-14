@@ -2,50 +2,6 @@ import java.util.ArrayList;
 import java.util.function.*;
 
 public class SimpleExpressionParser implements ExpressionParser {
-	private ParseSequence _sequence;
-	private ParseSequence _parserS;
-	private ParseSequence _parserM;
-	private ParseSequence _parserE;
-	private ParseSequence _parserP;
-	private ParseSequence _parserL;
-	private ParseSequence _parserV;
-
-	private class ParseSequence {
-		private ArrayList<Function<String, Expression>> _parseFcns;
-		private ArrayList<ParseSequence> _parseSequences;
-
-		public ParseSequence() {
-			_parseFcns = new ArrayList<Function<String, Expression>>();
-		}
-
-		public void addFcn(Function<String, Expression> aParseFcn) {
-			_parseFcns.add(aParseFcn);
-		}
-
-		public void addSequence(ParseSequence aParseSequence) {
-			_parseSequences.add(aParseSequence);
-		}
-
-		public Expression parse(String str) {
-			for (Function<String, Expression> aParseFcn : _parseFcns) {
-				Expression expression = aParseFcn.apply(str);
-				if (expression != null) {
-					return expression;
-				}
-			}
-			for (ParseSequence aParseSequence : _parseSequences) {
-				Expression expression = aParseSequence.parse(str);
-				if (expression != null) {
-					return expression;
-				}
-			}
-			return null;
-		}
-
-		public Function<String, Expression> getParseFcn() {
-			return str -> parse(str);
-		}
-	}
 
 	/*-
 	 * Attempts to create an expression tree from the specified String.
@@ -61,14 +17,19 @@ public class SimpleExpressionParser implements ExpressionParser {
 	 * @param str the string to parse into an expression tree
 	 * @return the Expression object representing the parsed expression tree
 	 */
+	
 	public Expression parse(String str) throws ExpressionParseException {
+		// remove whitespace
 		str = str.replaceAll(" ", "");
+		// try to parse as additive expression
 		Expression expression = parseAdditiveExpression(str);
 
+		// if that doesn't work, parse as parenthetical expression
 		if (expression == null) {
 			expression = parseParentheticalExpression(str);
 		}
 
+		// otherwise, throw exception
 		if (expression == null) {
 			throw new ExpressionParseException("Cannot parse expression: " + str);
 		}
@@ -81,14 +42,17 @@ public class SimpleExpressionParser implements ExpressionParser {
 		Expression left;
 		Expression right;
 		for (int i = 0; i < str.length(); i++) {
+			// search until finds a + sign, then lefts the left be additive parsing and right be multiplication parsing
 			if (str.charAt(i) == '+') {
 				left = parseAdditiveExpression(str.substring(0, i));
 				right = parseMultiplicationExpression(str.substring(i + 1, str.length()));
+				// if both sides cannot be parsed, make a new addition expression
 				if (!(left == null || right == null)) {
 					expression = new AdditionExpression(left, right);
 				}
 			}
 		}
+		// if no addition sign is found, try the same for a subtraction sign
 		if (expression == null) {
 			for (int i = 0; i < str.length(); i++) {
 				if (str.charAt(i) == '-') {
@@ -100,6 +64,7 @@ public class SimpleExpressionParser implements ExpressionParser {
 				}
 			}
 		}
+		// if nothing is working, parse this as a multiplication expression
 		if (expression == null) {
 			expression = parseMultiplicationExpression(str);
 		}
@@ -113,25 +78,31 @@ public class SimpleExpressionParser implements ExpressionParser {
 		Expression left;
 		Expression right;
 		for (int i = 0; i < str.length(); i++) {
+			// search until a multiplication symbol is found
 			if (str.charAt(i) == '*') {
 				left = parseMultiplicationExpression(str.substring(0, i));
 				right = parseExponentialExpression(str.substring(i + 1, str.length()));
+				// if they are not null, make a new multiplication expression
 				if (!(left == null || right == null)) {
 					expression = new MultiplicationExpression(left, right);
 				}
 			}
 		}
+		// if no multiplication symbol found, try the same for division
 		if (expression == null) {
 			for (int i = 0; i < str.length(); i++) {
 				if (str.charAt(i) == '/') {
+					// if division symbol found try further parsing as multiplication expression and exponential on right
 					left = parseMultiplicationExpression(str.substring(0, i));
 					right = parseExponentialExpression(str.substring(i + 1, str.length()));
+					// if either sides cannot be parsed further, make a new division expression
 					if (!(left == null || right == null)) {
 						expression = new DivisionExpression(left, right);
 					}
 				}
 			}
 		}
+		// if neither symbol is found, parse it as an exponential expression
 		if (expression == null) {
 			expression = parseExponentialExpression(str);
 		}
@@ -145,17 +116,21 @@ public class SimpleExpressionParser implements ExpressionParser {
 		Expression left;
 		Expression right;
 		for (int i = 0; i < str.length(); i++) {
+			// search for the ^ character, if found parse left as parenthetical and right as exponential expression
 			if (str.charAt(i) == '^') {
 				left = parseParentheticalExpression(str.substring(0, i));
 				right = parseExponentialExpression(str.substring(i + 1, str.length()));
+				// if either side cannot be parsed further, make new exponential expression
 				if (!(left == null || right == null)) {
 					expression = new ExponentialExpression(left, right);
 				}
 			}
 		}
+		// if ^ character not found, try parsing as parenthetical
 		if (expression == null) {
 			expression = parseParentheticalExpression(str);
 		}
+		// if parenthetical parsing does not work and string starts with log, try making it into a logarithm expression
 		if (expression == null) {
 			if (str.startsWith("log")) {
 				expression = new LogarithmicExpression(parseParentheticalExpression(str.substring(3, str.length())));
@@ -166,33 +141,33 @@ public class SimpleExpressionParser implements ExpressionParser {
 
 	protected /* Parenthetical */ Expression parseParentheticalExpression(String str) {
 		Expression expression = null;
+		// if the length is at least 2 for two parentheses and both starts and ends in a parenthesis, try making a new parenthetical expression
+		// with the top-level "parse" function run again
 		if (str.length() >= 2 && str.charAt(0) == '(' && str.charAt(str.length() - 1) == ')') {
 			try {
-				// TODO: after implementing parseSum, change parse() to parseSum()
 				expression = new ParentheticalExpression(parse(str.substring(1, str.length() - 1)));
 			} catch (ExpressionParseException e) {
 			}
 		}
+		// if this is not the case, try parsing as a variable
 		if (expression == null) {
 			expression = parseVariableExpression(str);
 		}
+		// if neither options work, try parsing as a literal
 		if (expression == null) {
 			expression = parseLiteralExpression(str);
 		}
 		return expression;
 	}
 
-	// TODO: once you implement a VariableExpression class, fix the return-type
-	// below.
 	protected /* Variable */Expression parseVariableExpression(String str) {
+		// if the string is x, return the variable expression, otherwise do not return anything
 		if (str.equals("x")) {
 			return new VariableExpression();
 		}
 		return null;
 	}
 
-	// TODO: once you implement a LiteralExpression class, fix the return-type
-	// below.
 	protected /* Literal */Expression parseLiteralExpression(String str) {
 		// From
 		// https://stackoverflow.com/questions/3543729/how-to-check-that-a-string-is-parseable-to-a-double/22936891:
@@ -233,9 +208,6 @@ public class SimpleExpressionParser implements ExpressionParser {
 				")[pP][+-]?" + Digits + "))" + "[fFdD]?))" + "[\\x00-\\x20]*");// Optional trailing "whitespace"
 
 		if (str.matches(fpRegex)) {
-			// return null;
-			// TODO: Once you implement LiteralExpression, replace the line above with the
-			// line below:
 			return new LiteralExpression(str);
 		}
 		return null;

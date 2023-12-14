@@ -7,21 +7,21 @@ import java.io.*;
  * Some code to help you test Project 4.
  */
 public class ExpressionParserTester {
-	private ExpressionParser _parser = new SimpleExpressionParser();
+	private ExpressionParser _parser;
 
 	@BeforeEach
 	/**
 	 * Instantiates the actors and movies graphs
 	 */
-//	public void setUp() throws IOException {
-//		_parser = new SimpleExpressionParser();
-//	}
+	public void setUp() throws IOException {
+		_parser = new SimpleExpressionParser();
+	}
 
 	@Test
 	/**
 	 * Verifies that a specific expression is parsed into the correct parse tree.
 	 */
-	public void testExpression1() throws ExpressionParseException {
+	public void testExpressionAdditive() throws ExpressionParseException {
 		final String expressionStr = "x+x";
 		final String parseTreeStr = "+\n\tx\n\tx\n";
 		assertEquals(parseTreeStr, _parser.parse(expressionStr).convertToString(0));
@@ -31,18 +31,36 @@ public class ExpressionParserTester {
 	/**
 	 * Verifies that a specific expression is parsed into the correct parse tree.
 	 */
-	public void testExpression2() throws ExpressionParseException {
+	public void testExpressionMultiplicative() throws ExpressionParseException {
 		final String expressionStr = "13*x";
 		final String parseTreeStr = "*\n\t13.0\n\tx\n";
 		assertEquals(parseTreeStr, _parser.parse(expressionStr).convertToString(0));
 	}
 
 	@Test
+<<<<<<< HEAD
 	public void testExpression3() throws ExpressionParseException {
+=======
+	/**
+	 * Verifies that a specific expression is parsed into the correct parse tree.
+	 */
+	public void testExpressionAdditiveParentheses() throws ExpressionParseException {
+		final String expressionStr = "4+(x+5+x)";
+		final String parseTreeStr = "+\n" + "\t4.0\n" + "\t()\n" + "\t\t+\n" + "\t\t\t+\n" + "\t\t\t\tx\n" + "\t\t\t\t5.0\n"
+				+ "\t\t\tx\n";
+		assertEquals(parseTreeStr, _parser.parse(expressionStr).convertToString(0));
+	}
+
+	@Test
+	/**
+	 * Verifies that a specific expression is evaluated correctly.
+	 */
+	public void testExpressionPolynomial() throws ExpressionParseException {
+>>>>>>> b6be93b123029e95eb2b08c62f31ea3fc6e53d80
 		final String expressionStr = "10*x^3 + 2*(15+x)";
-		final String parseTreeStr = "";
+		final String parseTreeStr = "+\n\t*\n\t\t10.0\n\t\t^\n\t\t\tx\n\t\t\t3.0\n\t*\n\t\t2.0\n\t\t()\n\t\t\t+\n\t\t\t\t15.0\n\t\t\t\tx\n";
 		assertEquals(
-				"+\n\t*\n\t\t10.0\n\t\t^\n\t\t\tx\n\t\t\t3.0\n\t*\n\t\t2.0\n\t\t()\n\t\t\t+\n\t\t\t\t15.0\n\t\t\t\tx\n",
+				parseTreeStr,
 				_parser.parse(expressionStr).convertToString(0));
 	}
 
@@ -50,6 +68,7 @@ public class ExpressionParserTester {
 	/**
 	 * Verifies that a specific expression is evaluated correctly.
 	 */
+<<<<<<< HEAD
 	public void testExpression4() throws ExpressionParseException {
 		final String expressionStr = "4+(x+5+x)";
 		final String parseTreeStr = "+\n" + "\t4.0\n" + "\t()\n" + "\t\t+\n" + "\t\t\t+\n" + "\t\t\t\tx\n" + "\t\t\t\t5.0\n"
@@ -61,6 +80,9 @@ public class ExpressionParserTester {
 
 	@Test
 	public void testExpression5() throws ExpressionParseException {
+=======
+	public void testExpressionDoubleParentheses() throws ExpressionParseException {
+>>>>>>> b6be93b123029e95eb2b08c62f31ea3fc6e53d80
 		final String expressionStr = "((x))";
 		final String parseTreeStr = "()\n" + "\t()\n" + "\t\tx\n";
 		_parser.parse(expressionStr);
@@ -69,7 +91,10 @@ public class ExpressionParserTester {
 	
 	
 	@Test
-	public void testExpression6() throws ExpressionParseException {
+	/**
+	 * Verifies that a specific expression is evaluated correctly.
+	 */
+	public void testExpressionExponentiation() throws ExpressionParseException {
 		final String expressionStr = "2^x^3";
 		final String parseTreeStr = "^\n" + "\t2.0\n" + "\t^\n" + "\t\tx\n" + "\t\t3.0\n";
 		assertEquals(parseTreeStr, _parser.parse(expressionStr).convertToString(0));
@@ -79,7 +104,7 @@ public class ExpressionParserTester {
 	/**
 	 * Verifies that a specific expression is parsed into the correct parse tree.
 	 */
-	public void testException1() {
+	public void testExceptionAdditive() {
 		try {
 			final String expressionStr = "1+2+";
 			_parser.parse(expressionStr);
@@ -91,7 +116,7 @@ public class ExpressionParserTester {
 	/**
 	 * Verifies that a specific expression is parsed into the correct parse tree.
 	 */
-	public void testException2() {
+	public void testExceptionNestedParentheses() {
 		try {
 			final String expressionStr = "((()))";
 			_parser.parse(expressionStr);
@@ -103,7 +128,7 @@ public class ExpressionParserTester {
 	/**
 	 * Verifies that a specific expression is parsed into the correct parse tree.
 	 */
-	public void testException3() {
+	public void testExceptionSequentialParentheses() {
 		try {
 			final String expressionStr = "()()";
 			_parser.parse(expressionStr);
@@ -115,7 +140,7 @@ public class ExpressionParserTester {
 	/**
 	 * Verifies that a specific expression is evaluated correctly.
 	 */
-	public void testEvaluate0() throws ExpressionParseException {
+	public void testEvaluateAdditive() throws ExpressionParseException {
 		final String expressionStr = "x+x";
 		assertEquals(156, (int) _parser.parse(expressionStr).evaluate(78));
 	}
@@ -124,7 +149,7 @@ public class ExpressionParserTester {
 	/**
 	 * Verifies that a specific expression is evaluated correctly.
 	 */
-	public void testEvaluate1() throws ExpressionParseException {
+	public void testEvaluateAdditiveTwoSymbolsParentheses() throws ExpressionParseException {
 		final String expressionStr = "(x+x)";
 		assertEquals(156, (int) _parser.parse(expressionStr).evaluate(78));
 	}
@@ -133,7 +158,7 @@ public class ExpressionParserTester {
 	/**
 	 * Verifies that a specific expression is evaluated correctly.
 	 */
-	public void testEvaluate2() throws ExpressionParseException {
+	public void testEvaluateAdditiveParentheses() throws ExpressionParseException {
 		final String expressionStr = "4+(x+5+x)";
 		assertEquals(15, (int) _parser.parse(expressionStr).evaluate(3));
 	}
@@ -142,7 +167,7 @@ public class ExpressionParserTester {
 	/**
 	 * Verifies that a specific expression is evaluated correctly.
 	 */
-	public void testEvaluate3() throws ExpressionParseException {
+	public void testEvaluateAdditiveMultiplicative() throws ExpressionParseException {
 		final String expressionStr = "4*(x+5*x)";
 		assertEquals(72, (int) _parser.parse(expressionStr).evaluate(3));
 	}
@@ -151,7 +176,7 @@ public class ExpressionParserTester {
 	/**
 	 * Verifies that a specific expression is evaluated correctly.
 	 */
-	public void testEvaluate4() throws ExpressionParseException {
+	public void testEvaluateSingleLiteral() throws ExpressionParseException {
 		final String expressionStr = "x";
 		assertEquals(2, (int) _parser.parse(expressionStr).evaluate(2));
 	}
@@ -160,8 +185,9 @@ public class ExpressionParserTester {
 	/**
 	 * Verifies that a specific expression is evaluated correctly.
 	 */
-	public void testEvaluate8() throws ExpressionParseException {
+	public void testEvaluateMultiplicationDivision() throws ExpressionParseException {
 		final String expressionStr = "9/3*3";
+System.out.println(_parser.parse(expressionStr).convertToString(0));
 		assertEquals(9, (int) _parser.parse(expressionStr).evaluate(333));
 	}
 
@@ -169,7 +195,7 @@ public class ExpressionParserTester {
 	/**
 	 * Verifies that a specific expression is evaluated correctly.
 	 */
-	public void testEvaluate16() throws ExpressionParseException {
+	public void testEvaluateSubtractionMultiplication() throws ExpressionParseException {
 		final String expressionStr = "4-3*x";
 		assertEquals(-3.5, _parser.parse(expressionStr).evaluate(2.5), 0.01);
 	}
@@ -178,7 +204,7 @@ public class ExpressionParserTester {
 	/**
 	 * Verifies that a specific expression is evaluated correctly.
 	 */
-	public void testEvaluate32() throws ExpressionParseException {
+	public void testEvaluateRationalExpression() throws ExpressionParseException {
 		final String expressionStr = "1./(1. + 5^(-1*x))";
 		assertEquals(0.8333333333333334, _parser.parse(expressionStr).evaluate(1), 0.05);
 	}
@@ -187,7 +213,7 @@ public class ExpressionParserTester {
 	/**
 	 * Verifies that a specific expression is evaluated correctly.
 	 */
-	public void testEvaluate64() throws ExpressionParseException {
+	public void testEvaluateExponetiation() throws ExpressionParseException {
 		final String expressionStr = "4^3^2";
 		assertEquals(262144, (int) _parser.parse(expressionStr).evaluate(0));
 	}
