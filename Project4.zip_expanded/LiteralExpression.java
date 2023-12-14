@@ -12,7 +12,6 @@ public class LiteralExpression implements Expression {
 	
 	@Override
 	public Expression deepCopy() {
-		// TODO Auto-generated method stub
 		return new LiteralExpression(_value);
 	}
 
