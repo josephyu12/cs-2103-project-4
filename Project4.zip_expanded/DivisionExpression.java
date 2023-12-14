@@ -1,11 +1,18 @@
-
+/**
+ * A class used to represent the division of two Expressions
+ */
 public class DivisionExpression extends BinaryExpression {
 
-	public DivisionExpression(Expression left, Expression right) {
+	/**
+	 * 
+	 * @param dividend Expression in the numerator
+	 * @param divisor  Expression in the denominator
+	 */
+	public DivisionExpression(Expression dividend, Expression divisor) {
 		_symbol = "/";
 		_evalFcn = (leftVal, rightVal) -> leftVal / rightVal;
-		_left = left;
-		_right = right;
+		_left = dividend;
+		_right = divisor;
 	}
 
 	@Override
@@ -20,5 +27,5 @@ public class DivisionExpression extends BinaryExpression {
 		Expression denominator = new ExponentialExpression(_right.deepCopy(), new LiteralExpression(2));
 		return new DivisionExpression(new SubtractionExpression(numeratorLeft, numeratorRight), denominator);
 	}
-	
+
 }

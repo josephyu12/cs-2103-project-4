@@ -1,4 +1,6 @@
-
+/**
+ * Represents an Expression containing a Double
+ */
 public class LiteralExpression implements Expression {
 	double _value;
 

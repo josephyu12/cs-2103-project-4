@@ -1,11 +1,13 @@
-
+/**
+ * A class used to represent exponentiation with Expression as the base, and the other as the exponent
+ */
 public class ExponentialExpression extends BinaryExpression {
 
-	public ExponentialExpression(Expression left, Expression right) {
+	public ExponentialExpression(Expression base, Expression exponent) {
 		_symbol = "^";
 		_evalFcn = (leftVal, rightVal) -> Math.pow(leftVal, rightVal);
-		_left = left;
-		_right = right;
+		_left = base;
+		_right = exponent;
 	}
 
 	@Override

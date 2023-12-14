@@ -1,4 +1,3 @@
-
 public class ParentheticalExpression extends UnaryExpression {
 	public ParentheticalExpression(Expression next) {
 		_symbol = "()";

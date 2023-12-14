@@ -16,3 +16,7 @@
 /SubtractionExpression.class
 /AdditionExpression.class
 /SimpleExpressionParser$ParseSequence.class
+/LogarithmicExpression.class
+/DivisionExpression.class
+/ExponentialExpression.class
+/MultiplicationExpression.class
