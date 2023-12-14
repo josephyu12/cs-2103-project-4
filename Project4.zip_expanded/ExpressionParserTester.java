@@ -38,25 +38,25 @@ public class ExpressionParserTester {
 	}
 
 	@Test
-	/**
-	 * Verifies that a specific expression is evaluated correctly.
-	 */
 	public void testExpression3() throws ExpressionParseException {
-		final String expressionStr = "4+(x+5+x)";
-		final String parseTreeStr = "+\n" + "\t4.0\n" + "\t()\n" + "\t\t+\n" + "\t\t\tx\n" + "\t\t\t+\n" + "\t\t\t\t5.0\n"
-				+ "\t\t\t\tx\n";
-//		System.out.println(parseTreeStr);
-		System.out.println(_parser.parse(expressionStr).convertToString(0));
-		assertEquals(parseTreeStr, _parser.parse(expressionStr).convertToString(0));
-	}
-
-	@Test
-	public void testExpression4() throws ExpressionParseException {
 		final String expressionStr = "10*x^3 + 2*(15+x)";
 		final String parseTreeStr = "";
 		assertEquals(
 				"+\n\t*\n\t\t10.0\n\t\t^\n\t\t\tx\n\t\t\t3.0\n\t*\n\t\t2.0\n\t\t()\n\t\t\t+\n\t\t\t\t15.0\n\t\t\t\tx\n",
 				_parser.parse(expressionStr).convertToString(0));
+	}
+
+	@Test
+	/**
+	 * Verifies that a specific expression is evaluated correctly.
+	 */
+	public void testExpression4() throws ExpressionParseException {
+		final String expressionStr = "4+(x+5+x)";
+		final String parseTreeStr = "+\n" + "\t4.0\n" + "\t()\n" + "\t\t+\n" + "\t\t\t+\n" + "\t\t\t\tx\n" + "\t\t\t\t5.0\n"
+				+ "\t\t\tx\n";
+//		System.out.println(parseTreeStr);
+		System.out.println(_parser.parse(expressionStr).convertToString(0));
+		assertEquals(parseTreeStr, _parser.parse(expressionStr).convertToString(0));
 	}
 
 	@Test

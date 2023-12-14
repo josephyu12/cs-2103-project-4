@@ -243,7 +243,7 @@ public class SimpleExpressionParser implements ExpressionParser {
 
 	public static void main(String[] args) throws ExpressionParseException {
 		final ExpressionParser parser = new SimpleExpressionParser();
-		Expression e = parser.parse("13*x");
+		Expression e = parser.parse("(x+2)^(2)");
 		System.out.println(e.convertToString(0));
 		e.evaluate(0);
 		System.out.println(e.evaluate(0));
