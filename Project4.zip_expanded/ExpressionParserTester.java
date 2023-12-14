@@ -64,6 +64,16 @@ public class ExpressionParserTester {
 	/**
 	 * Verifies that a specific expression is evaluated correctly.
 	 */
+	public void testExpression4() throws ExpressionParseException {
+		final String expressionStr = "4+(x+5+x)";
+		final String parseTreeStr = "+\n" + "\t4.0\n" + "\t()\n" + "\t\t+\n" + "\t\t\t+\n" + "\t\t\t\tx\n" + "\t\t\t\t5.0\n"
+				+ "\t\t\tx\n";
+//		System.out.println(parseTreeStr);
+		System.out.println(_parser.parse(expressionStr).convertToString(0));
+		assertEquals(parseTreeStr, _parser.parse(expressionStr).convertToString(0));
+	}
+
+	@Test
 	public void testExpressionDoubleParentheses() throws ExpressionParseException {
 		final String expressionStr = "((x))";
 		final String parseTreeStr = "()\n" + "\t()\n" + "\t\tx\n";

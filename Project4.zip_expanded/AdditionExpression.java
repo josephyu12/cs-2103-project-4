@@ -1,3 +1,6 @@
+/**
+ * A class used to represent the addition of two Expressions
+ */
 public class AdditionExpression extends BinaryExpression {
 	public AdditionExpression(Expression left, Expression right) {
 		_symbol = "+";

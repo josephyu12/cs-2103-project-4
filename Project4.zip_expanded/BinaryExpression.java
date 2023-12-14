@@ -1,12 +1,18 @@
 
 import java.util.function.BiFunction;
 
+/**
+ * The superclass for binary expressions including addition/subtraction,
+ * multiplication/division, and exponentiation
+ */
 public abstract class BinaryExpression implements Expression {
-	// superclass for binary expressions including addition/subtraction, multiplication/division, and exponentiation 
 	protected String _symbol;
 	protected BiFunction<Double, Double, Double> _evalFcn;
 	protected Expression _left;
 	protected Expression _right;
+
+	// For all child classes of BinaryExpression, it is expected that the fields in
+	// the constructor are named left and right only if the operation is commutative
 
 	@Override
 	public String convertToString(int indentLevel) {

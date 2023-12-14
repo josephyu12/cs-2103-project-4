@@ -1,4 +1,6 @@
-
+/**
+ * Represents the multiplication of two Expressions
+ */
 public class MultiplicationExpression extends BinaryExpression {
 
 	public MultiplicationExpression(Expression left, Expression right) {
